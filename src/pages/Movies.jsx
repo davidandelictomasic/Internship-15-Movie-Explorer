@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useMemo } from 'react'
 import useFetchMovies from '../hooks/useFetchMovies'
 import MovieCard from '../components/MovieCard'
 import '../styles/Movies.css'
@@ -12,21 +12,23 @@ function Movies() {
   useEffect(() => {
     searchRef.current.focus()
   }, [])
-
-  const filteredMovies = movies.filter((movie) =>
-    movie.title.toLowerCase().includes(search.toLowerCase())
-  )
-  if(filter){
-    filteredMovies.sort((a,b)=>{
-      if(filter === 'title'){
-        return a.title.localeCompare(b.title)
-      } else if(filter === 'release_date'){
-        return b.year - a.year
-      } else if(filter === 'rating'){
-        return b.rating - a.rating  
-      }
-    })
-  }
+  const filteredMovies = useMemo(() => {
+    const result = movies.filter((movie) =>
+      movie.title.toLowerCase().includes(search.toLowerCase())
+    )
+    if (filter) {
+      result.sort((a, b) => {
+        if (filter === 'title') {
+          return a.title.localeCompare(b.title)
+        } else if (filter === 'release_date') {
+          return b.year - a.year
+        } else if (filter === 'rating') {
+          return b.rating - a.rating
+        }
+      })
+    }
+    return result
+  }, [movies, search, filter])
   return (
     <div>
       <h1>Movies</h1>
