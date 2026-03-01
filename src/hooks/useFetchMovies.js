@@ -1,14 +1,19 @@
 import { useState, useEffect } from 'react'
 import moviesData from '../data/movies'
 
+let cachedMovies = null
+
 function useFetchMovies() {
-  const [movies, setMovies] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [movies, setMovies] = useState(cachedMovies || [])
+  const [loading, setLoading] = useState(!cachedMovies)
   const [error, setError] = useState(null)
 
   useEffect(() => {
+    if (cachedMovies) return
+
     const timeout = setTimeout(() => {
       try {
+        cachedMovies = moviesData
         setMovies(moviesData)
         setLoading(false)
       } catch (err) {
