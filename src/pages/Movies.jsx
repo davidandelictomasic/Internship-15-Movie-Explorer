@@ -6,6 +6,7 @@ import '../styles/Movies.css'
 function Movies({ favorites }) {
   const { movies, loading, error } = useFetchMovies()
   const [filter,setFilter] = useState('')
+  const [genre, setGenre] = useState('')
   const [search, setSearch] = useState('')
   const [delayedSearch, setDebouncedSearch] = useState('')
   const searchRef = useRef(null)
@@ -25,7 +26,8 @@ function Movies({ favorites }) {
 
   const filteredMovies = useMemo(() => {
     const result = movies.filter((movie) =>
-      movie.title.toLowerCase().includes(delayedSearch.toLowerCase())
+      movie.title.toLowerCase().includes(delayedSearch.toLowerCase()) &&
+      (!genre || movie.genre === genre)
     )
     if (filter) {
       result.sort((a, b) => {
@@ -39,7 +41,7 @@ function Movies({ favorites }) {
       })
     }
     return result
-  }, [movies, delayedSearch, filter])
+  }, [movies, delayedSearch, filter, genre])
   
   return (
     <div>
@@ -52,6 +54,19 @@ function Movies({ favorites }) {
           value={search}
           onChange={handleSearch}
         />
+        <select value={genre} onChange={(e)=>setGenre(e.target.value)}>
+          <option value="">All Genres</option>
+          <option value="Action">Action</option>
+          <option value="Animation">Animation</option>
+          <option value="Comedy">Comedy</option>
+          <option value="Crime">Crime</option>
+          <option value="Drama">Drama</option>
+          <option value="Horror">Horror</option>
+          <option value="Sci-Fi">Sci-Fi</option>
+          <option value="Thriller">Thriller</option>
+          <option value="War">War</option>
+          <option value="Western">Western</option>
+        </select>
         <select value={filter} onChange={(e)=>setFilter(e.target.value)}>
           <option value="">Sort by</option>
           <option value="title">Title</option>
