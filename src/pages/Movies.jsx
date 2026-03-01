@@ -3,7 +3,7 @@ import useFetchMovies from '../hooks/useFetchMovies'
 import MovieCard from '../components/MovieCard'
 import '../styles/Movies.css'
 
-function Movies() {
+function Movies({ favorites }) {
   const { movies, loading, error } = useFetchMovies()
   const [filter,setFilter] = useState('')
   const [search, setSearch] = useState('')
@@ -34,21 +34,21 @@ function Movies() {
   return (
     <div>
       <h1>Movies</h1>
-      <input
-        ref={searchRef}
-        type="text"
-        placeholder="Search movies..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-      />
-      <label htmlFor="select">Sort by</label>
-      <select name='select' value={filter} onChange={(e)=>setFilter(e.target.value)}>
-        <option value=""></option>
-        <option value="title">Title</option>
-        <option value="release_date">Release Date</option>
-        <option value="rating">Rating</option>
-      </select>
-      <p>Current filter {filter}</p>
+      <div className="controls">
+        <input
+          ref={searchRef}
+          type="text"
+          placeholder="Search movies..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+        <select value={filter} onChange={(e)=>setFilter(e.target.value)}>
+          <option value="">Sort by</option>
+          <option value="title">Title</option>
+          <option value="release_date">Release Date</option>
+          <option value="rating">Rating</option>
+        </select>
+      </div>
       {loading && <p>Loading movies...</p>}
       {error && <p>{error}</p>}
       {!loading && !error && filteredMovies.length === 0 && (
@@ -56,7 +56,7 @@ function Movies() {
       )}
       <div className="grid">
         {filteredMovies.map((movie) => (
-          <MovieCard key={movie.id} movie={movie} />
+          <MovieCard key={movie.id} movie={movie} isFavorite={favorites.includes(movie.id)} />
         ))}
       </div>
     </div>

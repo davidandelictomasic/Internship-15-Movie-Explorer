@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom'
 import './MovieCard.css'
 
-function MovieCard({ movie }) {
+function MovieCard({ movie, isFavorite }) {
   return (
-    <Link to={`/movies/${movie.id}`} className="card">
+    <Link to={`/movies/${movie.id}`} className={`card ${isFavorite ? 'favorite' : ''}`}>
       <img
         src={movie.poster}
         alt={movie.title}

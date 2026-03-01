@@ -25,3 +25,7 @@
   color: #aaa;
   font-size: 0.85rem;
 }
+
+.card.favorite .poster {
+  border: 2px solid gold;
+}
